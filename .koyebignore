@@ -1,0 +1,38 @@
+# .koyebignore
+# Files and directories to ignore during Koyeb deployment
+
+# Development files
+node_modules/
+.env
+.env.local
+.env.development
+.git/
+.gitignore
+README.md
+DEPLOY_KOYEB.md
+startup.sh
+deploy-koyeb.sh
+test-server.js
+docker-compose.yml
+Dockerfile
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+logs/
+*.log
+
+# Temporary files
+tmp/
+temp/
+.nyc_output
+coverage/
+*.tgz

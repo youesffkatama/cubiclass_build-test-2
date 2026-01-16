@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scholar.AI | AI-Powered Academic Workspace</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div id="loadingScreen" class="loading-screen">
+        <div class="loading-content">
+            <div class="logo">
+                <i class="fas fa-brain"></i>
+                <h1>Scholar<span class="highlight">.AI</span></h1>
+            </div>
+            <div class="loading-spinner"></div>
+            <p>Initializing your AI study assistant...</p>
+        </div>
+    </div>
+
+    <!-- Main App Container -->
+    <div id="app" class="app-container" style="display: none;">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="logo-section">
+                <div class="logo">
+                    <i class="fas fa-brain"></i>
+                    <h1>Scholar<span class="highlight">.AI</span></h1>
+                </div>
+            </div>
+            
+            <nav class="main-nav">
+                <a href="#" class="nav-link active" data-view="dashboard">
+                    <i class="fas fa-home"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="#" class="nav-link" data-view="workspace">
+                    <i class="fas fa-folder-open"></i>
+                    <span>Workspace</span>
+                </a>
+                <a href="#" class="nav-link" data-view="chat">
+                    <i class="fas fa-comments"></i>
+                    <span>AI Chat</span>
+                </a>
+                <a href="#" class="nav-link" data-view="classes">
+                    <i class="fas fa-school"></i>
+                    <span>Classes</span>
+                </a>
+                <a href="#" class="nav-link" data-view="tasks">
+                    <i class="fas fa-tasks"></i>
+                    <span>Tasks</span>
+                </a>
+                <a href="#" class="nav-link" data-view="analytics">
+                    <i class="fas fa-chart-line"></i>
+                    <span>Analytics</span>
+                </a>
+                <a href="#" class="nav-link" data-view="flashcards">
+                    <i class="fas fa-layer-group"></i>
+                    <span>Flashcards</span>
+                </a>
+            </nav>
+            
+            <div class="user-profile">
+                <img id="userAvatar" src="" alt="User Avatar" class="avatar">
+                <div class="user-info">
+                    <h4 id="userName">Loading...</h4>
+                    <div class="user-stats">
+                        <span id="userLevel">Level 1</span>
+                        <span id="userXP">0 XP</span>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Header -->
+            <header class="header">
+                <div class="header-left">
+                    <h2 id="pageTitle">Dashboard</h2>
+                </div>
+                <div class="header-right">
+                    <button class="btn-icon" id="themeToggle">
+                        <i class="fas fa-moon"></i>
+                    </button>
+                    <button class="btn-icon" id="notificationsBtn">
+                        <i class="fas fa-bell"></i>
+                        <span class="badge" id="notificationBadge" style="display: none;">0</span>
+                    </button>
+                    <div class="user-menu">
+                        <img id="headerAvatar" src="" alt="User" class="avatar-small">
+                    </div>
+                </div>
+            </header>
+
+            <!-- Views Container -->
+            <div class="views-container">
+                <!-- Dashboard View -->
+                <div id="view-dashboard" class="view active">
+                    <div class="dashboard-grid">
+                        <div class="dashboard-header">
+                            <h2>Welcome back, <span id="welcomeName">User</span>!</h2>
+                            <p>Your AI-powered academic journey continues...</p>
+                        </div>
+
+                        <!-- Stats Cards -->
+                        <div class="stats-grid">
+                            <div class="stat-card">
+                                <div class="stat-icon bg-green">
+                                    <i class="fas fa-file-pdf"></i>
+                                </div>
+                                <div class="stat-info">
+                                    <h3 id="totalFiles">0</h3>
+                                    <p>Documents</p>
+                                </div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-icon bg-blue">
+                                    <i class="fas fa-comments"></i>
+                                </div>
+                                <div class="stat-info">
+                                    <h3 id="totalChats">0</h3>
+                                    <p>Conversations</p>
+                                </div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-icon bg-purple">
+                                    <i class="fas fa-tasks"></i>
+                                </div>
+                                <div class="stat-info">
+                                    <h3 id="totalTasks">0</h3>
+                                    <p>Tasks</p>
+                                </div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-icon bg-orange">
+                                    <i class="fas fa-fire"></i>
+                                </div>
+                                <div class="stat-info">
+                                    <h3 id="streakDays">0</h3>
+                                    <p>Day Streak</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Recent Activity -->
+                        <div class="section-card">
+                            <div class="section-header">
+                                <h3>Recent Activity</h3>
+                                <button class="btn-text">View All</button>
+                            </div>
+                            <div id="recentActivity" class="activity-feed">
+                                <!-- Activity items will be populated here -->
+                            </div>
+                        </div>
+
+                        <!-- Quick Actions -->
+                        <div class="section-card">
+                            <div class="section-header">
+                                <h3>Quick Actions</h3>
+                            </div>
+                            <div class="quick-actions">
+                                <button class="action-btn" id="uploadBtn">
+                                    <i class="fas fa-cloud-upload-alt"></i>
+                                    <span>Upload PDF</span>
+                                </button>
+                                <button class="action-btn" id="createClassBtn">
+                                    <i class="fas fa-plus-circle"></i>
+                                    <span>Create Class</span>
+                                </button>
+                                <button class="action-btn" id="newChatBtn">
+                                    <i class="fas fa-comment-medical"></i>
+                                    <span>New Chat</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Workspace View -->
+                <div id="view-workspace" class="view">
+                    <div class="workspace-header">
+                        <h2>Your Knowledge Library</h2>
+                        <div class="workspace-actions">
+                            <input type="file" id="fileInput" accept=".pdf" style="display: none;">
+                            <button class="btn-primary" id="uploadFileBtn">
+                                <i class="fas fa-cloud-upload-alt"></i>
+                                Upload PDF
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="upload-area" id="uploadArea">
+                        <i class="fas fa-file-pdf"></i>
+                        <h3>Drag & Drop PDF Files</h3>
+                        <p>or click to browse files</p>
+                        <small>Max file size: 50MB • Supported: PDF</small>
+                    </div>
+
+                    <div class="files-grid" id="filesGrid">
+                        <!-- Files will be populated here -->
+                    </div>
+                </div>
+
+                <!-- Chat View -->
+                <div id="view-chat" class="view">
+                    <div class="chat-container">
+                        <div class="chat-sidebar">
+                            <div class="chat-controls">
+                                <button class="btn-primary" id="newChatBtnSidebar">
+                                    <i class="fas fa-plus"></i>
+                                    New Chat
+                                </button>
+                            </div>
+                            <div class="conversations-list" id="conversationsList">
+                                <!-- Conversations will be populated here -->
+                            </div>
+                        </div>
+                        
+                        <div class="chat-main">
+                            <div class="chat-messages" id="chatMessages">
+                                <div class="welcome-message">
+                                    <h3>AI Study Assistant</h3>
+                                    <p>Ask me anything about your documents or studies. I'm here to help!</p>
+                                </div>
+                            </div>
+                            
+                            <div class="chat-input-container">
+                                <textarea 
+                                    id="chatInput" 
+                                    placeholder="Ask a question about your documents..." 
+                                    rows="1"
+                                ></textarea>
+                                <button id="sendChatBtn" class="btn-primary">
+                                    <i class="fas fa-paper-plane"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Classes View -->
+                <div id="view-classes" class="view">
+                    <div class="classes-header">
+                        <h2>Your Classes</h2>
+                        <button class="btn-primary" id="createClassModalBtn">
+                            <i class="fas fa-plus"></i>
+                            Create Class
+                        </button>
+                    </div>
+
+                    <div class="classes-grid" id="classesGrid">
+                        <!-- Classes will be populated here -->
+                    </div>
+
+                    <!-- Class Detail View (hidden by default) -->
+                    <div id="classDetailView" class="class-detail-view" style="display: none;">
+                        <div class="class-header">
+                            <button class="btn-back" id="backToClasses">
+                                <i class="fas fa-arrow-left"></i>
+                            </button>
+                            <h2 id="classNameDetail"></h2>
+                            <div class="class-actions">
+                                <button class="btn-icon" id="classMembersBtn">
+                                    <i class="fas fa-users"></i>
+                                </button>
+                                <button class="btn-icon" id="addTaskBtn">
+                                    <i class="fas fa-plus"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="class-content">
+                            <div class="class-stream" id="classStream">
+                                <!-- Posts will be populated here -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tasks View -->
+                <div id="view-tasks" class="view">
+                    <div class="tasks-header">
+                        <h2>Your Tasks</h2>
+                        <button class="btn-primary" id="createTaskBtn">
+                            <i class="fas fa-plus"></i>
+                            Add Task
+                        </button>
+                    </div>
+
+                    <div class="tasks-filters">
+                        <button class="filter-btn active" data-filter="all">All</button>
+                        <button class="filter-btn" data-filter="pending">Pending</button>
+                        <button class="filter-btn" data-filter="in-progress">In Progress</button>
+                        <button class="filter-btn" data-filter="completed">Completed</button>
+                    </div>
+
+                    <div class="tasks-grid" id="tasksGrid">
+                        <!-- Tasks will be populated here -->
+                    </div>
+                </div>
+
+                <!-- Analytics View -->
+                <div id="view-analytics" class="view">
+                    <div class="analytics-header">
+                        <h2>Learning Analytics</h2>
+                    </div>
+
+                    <div class="analytics-grid">
+                        <div class="chart-container">
+                            <h3>Study Performance</h3>
+                            <canvas id="performanceChart"></canvas>
+                        </div>
+                        <div class="chart-container">
+                            <h3>Subject Distribution</h3>
+                            <canvas id="subjectChart"></canvas>
+                        </div>
+                        <div class="stats-container">
+                            <h3>Learning Stats</h3>
+                            <div class="stats-grid">
+                                <div class="stat-item">
+                                    <i class="fas fa-clock"></i>
+                                    <div>
+                                        <h4 id="avgSessionTime">0 min</h4>
+                                        <p>Avg Session Time</p>
+                                    </div>
+                                </div>
+                                <div class="stat-item">
+                                    <i class="fas fa-chart-pie"></i>
+                                    <div>
+                                        <h4 id="completionRate">0%</h4>
+                                        <p>Completion Rate</p>
+                                    </div>
+                                </div>
+                                <div class="stat-item">
+                                    <i class="fas fa-lightbulb"></i>
+                                    <div>
+                                        <h4 id="knowledgeScore">0</h4>
+                                        <p>Knowledge Score</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Flashcards View -->
+                <div id="view-flashcards" class="view">
+                    <div class="flashcards-header">
+                        <h2>Smart Flashcards</h2>
+                        <div class="flashcards-actions">
+                            <select id="flashcardSource">
+                                <option value="">Select Document</option>
+                                <!-- Options will be populated -->
+                            </select>
+                            <button class="btn-primary" id="generateFlashcardsBtn">
+                                <i class="fas fa-sync-alt"></i>
+                                Generate
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="flashcards-container" id="flashcardsContainer">
+                        <div class="empty-state">
+                            <i class="fas fa-layer-group"></i>
+                            <h3>No Flashcards Yet</h3>
+                            <p>Select a document and generate flashcards to start studying</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modals -->
+    <div id="modalOverlay" class="modal-overlay" style="display: none;">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3 id="modalTitle">Modal Title</h3>
+                <button class="btn-close" id="closeModal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body" id="modalBody">
+                <!-- Modal content will be populated here -->
+            </div>
+            <div class="modal-footer" id="modalFooter">
+                <button class="btn-text" id="cancelModal">Cancel</button>
+                <button class="btn-primary" id="confirmModal">Confirm</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div id="toastContainer" class="toast-container"></div>
+
+    <script src="script.js"></script>
+</body>
+</html>

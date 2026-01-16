@@ -1,0 +1,37 @@
+services:
+  - name: scholar-ai
+    type: web
+    build_type: npm
+    build_command: npm install
+    run_command: npm start
+    env:
+      - name: NODE_ENV
+        value: production
+      - name: PORT
+        value: 8080
+      - name: MONGODB_URI
+        secret_ref: MONGODB_URI
+      - name: REDIS_HOST
+        secret_ref: REDIS_HOST
+      - name: REDIS_PORT
+        secret_ref: REDIS_PORT
+      - name: REDIS_PASSWORD
+        secret_ref: REDIS_PASSWORD
+      - name: JWT_SECRET
+        secret_ref: JWT_SECRET
+      - name: JWT_REFRESH_SECRET
+        secret_ref: JWT_REFRESH_SECRET
+      - name: OPENROUTER_API_KEY
+        secret_ref: OPENROUTER_API_KEY
+      - name: FRONTEND_URL
+        value: https://${SERVICE_NAME}-${APP_NAME}.${REGION}.koyeb.app
+    ports:
+      - port: 8080
+        protocol: http
+    health_checks:
+      - type: http
+        path: /health
+        interval: 30
+        timeout: 10
+        consecutive_errors: 3
+        consecutive_successes: 1

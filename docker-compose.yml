@@ -1,0 +1,56 @@
+# docker-compose.yml
+version: '3.8'
+
+services:
+  app:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=development
+      - MONGODB_URI=mongodb://mongo:27017/scholarai
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - JWT_SECRET=your-super-secret-jwt-key-min-32-chars
+      - JWT_REFRESH_SECRET=your-refresh-secret-min-32-chars
+      - OPENROUTER_API_KEY=sk-or-v1-your-key-here
+    depends_on:
+      - mongo
+      - redis
+    volumes:
+      - ./uploads:/app/uploads
+
+  worker:
+    build: .
+    command: npm run worker
+    environment:
+      - NODE_ENV=development
+      - MONGODB_URI=mongodb://mongo:27017/scholarai
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - JWT_SECRET=your-super-secret-jwt-key-min-32-chars
+      - JWT_REFRESH_SECRET=your-refresh-secret-min-32-chars
+      - OPENROUTER_API_KEY=sk-or-v1-your-key-here
+    depends_on:
+      - mongo
+      - redis
+    volumes:
+      - ./uploads:/app/uploads
+
+  mongo:
+    image: mongo:6.0
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+
+volumes:
+  mongo_data:
+  redis_data:
