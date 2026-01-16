@@ -1,8 +1,8 @@
 // server/routes/api/v1/tasks.js
 const express = require('express');
 const router = express.Router();
-const taskController = require('../../controllers/taskController');
-const { validate, schemas } = require('../../middleware/validation');
+const taskController = require('../../../controllers/taskController');
+const { validate, schemas } = require('../../../middleware/validation');
 
 // Create task
 router.post('/', validate(schemas.createTask), taskController.createTask);

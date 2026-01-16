@@ -1,8 +1,8 @@
 // server/routes/api/v1/intelligence.js
 const express = require('express');
 const router = express.Router();
-const intelligenceController = require('../../controllers/intelligenceController');
-const { validate, schemas } = require('../../middleware/validation');
+const intelligenceController = require('../../../controllers/intelligenceController');
+const { validate, schemas } = require('../../../middleware/validation');
 
 // Stream chat
 router.post('/chat/stream', validate(schemas.chat), intelligenceController.streamChat);

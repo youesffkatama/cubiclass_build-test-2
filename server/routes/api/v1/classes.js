@@ -1,8 +1,8 @@
 // server/routes/api/v1/classes.js
 const express = require('express');
 const router = express.Router();
-const classController = require('../../controllers/classController');
-const { validate, schemas } = require('../../middleware/validation');
+const classController = require('../../../controllers/classController');
+const { validate, schemas } = require('../../../middleware/validation');
 
 // Create class
 router.post('/', validate(schemas.createClass), classController.createClass);

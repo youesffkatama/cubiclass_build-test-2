@@ -1,8 +1,8 @@
 // server/routes/api/v1/auth.js
 const express = require('express');
 const router = express.Router();
-const authController = require('../../controllers/authController');
-const { validate, schemas } = require('../../middleware/validation');
+const authController = require('../../../controllers/authController');
+const { validate, schemas } = require('../../../middleware/validation');
 
 // Public routes
 router.post('/register', validate(schemas.register), authController.register);

@@ -1,7 +1,7 @@
 // server/routes/api/v1/analytics.js
 const express = require('express');
 const router = express.Router();
-const analyticsController = require('../../controllers/analyticsController');
+const analyticsController = require('../../../controllers/analyticsController');
 
 // Get dashboard
 router.get('/dashboard', analyticsController.getDashboard);
