@@ -1,0 +1,220 @@
+# SCHOLAR.AI RECREATION PROMPT FOR AI SYSTEMS
+
+## MISSION
+Create a perfect replica of the Scholar.AI application with identical theme, style, creativity, colors, power, and features. Recreate every aspect of the original application while maintaining the same innovative spirit and functionality.
+
+## APPLICATION IDENTITY
+- Name: Scholar.AI
+- Purpose: AI-powered academic workspace with RAG capabilities
+- Theme: Modern educational technology platform
+- Style: Clean, professional, academic with engaging elements
+- Creativity: Innovative approach to learning with AI integration
+- Colors: Professional academic palette (likely blues, whites, grays with accent colors)
+- Power: Advanced AI features, real-time processing, gamification
+- Core Features: PDF Intelligence, RAG Chat, Analytics, Gamification, Classroom Tools
+
+## VISUAL DESIGN SPECIFICATIONS
+1. Create a clean, modern interface with academic feel
+2. Use professional color scheme (blues, whites, grays) with accent colors for engagement
+3. Implement responsive design for all device sizes
+4. Include engaging visual elements for gamification features
+5. Design intuitive navigation with academic/workplace metaphor
+6. Create visually appealing data visualization for analytics
+7. Implement smooth animations and transitions
+8. Ensure consistent typography and spacing throughout
+9. Design attractive cards and panels for content organization
+10. Include visual feedback for user interactions
+
+## CORE FUNCTIONALITY REQUIREMENTS
+
+### AUTHENTICATION SYSTEM
+- User registration with email verification
+- Secure login/logout functionality
+- JWT-based authentication
+- Password reset capability
+- Profile management
+- Session management
+
+### PDF INTELLIGENCE ENGINE
+- PDF upload capability (up to 50MB files)
+- Progress indicators during processing
+- OCR fallback for scanned documents
+- File management system
+- Processing status tracking
+- Error handling for corrupted files
+- Preview functionality
+
+### RAG CHAT SYSTEM
+- Real-time chat interface with streaming responses
+- Context-aware Q&A based on uploaded documents
+- Conversation history management
+- Message threading
+- Typing indicators
+- Response citations/references
+- Ability to switch between different document contexts
+
+### GAMIFICATION SYSTEM
+- XP points for various activities:
+  - Login (+0 XP)
+  - Upload PDF (+50 XP)
+  - Chat Message (+2 XP)
+  - Complete Task (+10 XP)
+- Level calculation: level = floor(sqrt(xp / 100)) + 1
+- Rank tiers: Novice → Scholar → Researcher → Professor → Nobel
+- Daily streak tracking
+- Achievement badges
+- Progress bars and visual indicators
+- Leaderboard functionality
+
+### ANALYTICS DASHBOARD
+- Study performance tracking
+- Time spent on different activities
+- Document interaction statistics
+- Learning progress visualization
+- Productivity metrics
+- Interactive charts and graphs
+- Export functionality for reports
+
+### CLASSROOM FEATURES
+- Create/join classes functionality
+- Class stream for announcements
+- Assignment management
+- Student/teacher role differentiation
+- Collaboration tools
+- Resource sharing
+- Class analytics
+
+### STUDY TOOLS
+- AI-generated flashcards from documents
+- Quiz generation capability
+- Study plan creation
+- Note-taking functionality
+- Bookmarking important sections
+- Highlighting tools
+- Search within documents
+
+## TECHNICAL ARCHITECTURE
+### Backend Requirements
+- Node.js 20+ runtime environment
+- Express.js web framework
+- MongoDB database with vector search capabilities
+- Redis for caching and session management
+- BullMQ for background job processing
+- Socket.io for real-time features
+- OpenRouter API integration for AI services
+- Local embedding support with @xenova/transformers
+
+### Frontend Requirements
+- Vanilla JavaScript (modular architecture)
+- HTML5 semantic structure
+- CSS3 with modern layout techniques (Flexbox/Grid)
+- Responsive design principles
+- Progressive Web App (PWA) capabilities
+- Client-side routing if needed
+- State management system
+- Service workers for offline functionality
+
+### Security Measures
+- Input sanitization and validation
+- SQL injection prevention
+- XSS protection
+- CSRF protection
+- Rate limiting
+- Authentication middleware
+- Secure file upload handling
+- Data encryption where appropriate
+
+## USER EXPERIENCE SPECIFICATIONS
+1. Intuitive onboarding process
+2. Clear visual hierarchy
+3. Consistent interaction patterns
+4. Immediate feedback for user actions
+5. Loading states for asynchronous operations
+6. Error states with helpful messages
+7. Empty states for content areas
+8. Smooth transitions between views
+9. Keyboard navigation support
+10. Accessibility compliance (WCAG guidelines)
+
+## PERFORMANCE REQUIREMENTS
+- Fast loading times (<3 seconds for initial load)
+- Efficient PDF processing algorithms
+- Optimized database queries
+- Caching strategies for repeated requests
+- Lazy loading for heavy components
+- Image optimization
+- Bundle size optimization
+- Efficient memory usage
+
+## REAL-TIME FEATURES
+- Live activity feeds
+- Real-time notifications
+- Concurrent user collaboration
+- Live chat functionality
+- Real-time analytics updates
+- Synchronized document viewing
+
+## MOBILE RESPONSIVENESS
+- Touch-friendly interface elements
+- Optimized layouts for small screens
+- Mobile-first design approach
+- Gesture support where appropriate
+- Optimized performance on mobile devices
+- Offline capability for core features
+
+## INTEGRATION REQUIREMENTS
+- Third-party authentication (optional)
+- Payment gateway for premium features (if applicable)
+- Social sharing capabilities
+- Calendar integration
+- Email notifications
+- Push notification support
+
+## ERROR HANDLING & RELIABILITY
+- Graceful degradation when services are unavailable
+- Comprehensive error logging
+- User-friendly error messages
+- Automatic retry mechanisms
+- Backup and recovery procedures
+- Data validation at all levels
+
+## DEPLOYMENT SPECIFICATIONS
+- Docker containerization support
+- Environment configuration management
+- CI/CD pipeline readiness
+- Scalability considerations
+- Monitoring and logging setup
+- Backup procedures
+- Rollback capabilities
+
+## QUALITY ASSURANCE
+- Unit tests for all major components
+- Integration tests for API endpoints
+- End-to-end tests for critical user flows
+- Cross-browser compatibility testing
+- Performance benchmarking
+- Security vulnerability scanning
+- Accessibility testing
+- Load testing for expected traffic
+
+## CREATIVE ELEMENTS TO PRESERVE
+- Innovative approach to academic tools
+- Engaging gamification mechanics
+- Modern design with academic sensibility
+- Creative use of AI in educational context
+- Unique visual identity
+- Intuitive yet powerful feature set
+- Seamless integration of multiple tools
+- Personalized learning experience
+- Community and collaboration features
+- Progress visualization and motivation
+
+## SUCCESS METRICS
+- Feature parity with original application
+- Visual similarity to original design
+- Performance matching or exceeding original
+- User experience matching original
+- Code quality and maintainability
+- Security standards met
+- Scalability requirements satisfied
+- Cross-platform compatibility
