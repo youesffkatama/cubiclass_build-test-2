@@ -17,34 +17,349 @@ class ScholarAIApp {
         aiPersonality: 'friendly'
       }
     };
-    
+
     this.currentView = 'dashboard';
     this.eventSource = null;
-    
+    this.isInitialized = false;
+
     this.init();
   }
 
   async init() {
     // Show loading screen
     document.getElementById('loadingScreen').style.display = 'flex';
-    
+
     // Initialize modules
     this.initializeModules();
-    
+
     // Load user data
     await this.loadUserData();
-    
+
     // Set up event listeners
     this.setupEventListeners();
-    
+
     // Navigate to dashboard
     this.navigateTo('dashboard');
-    
+
     // Hide loading screen and show app
     setTimeout(() => {
       document.getElementById('loadingScreen').style.display = 'none';
       document.getElementById('app').style.display = 'flex';
+
+      // Add entrance animations to elements
+      this.animateEntrance();
+      
+      // Initialize additional features after DOM is ready
+      this.initializeAdditionalFeatures();
+      
+      this.isInitialized = true;
     }, 1500);
+  }
+
+  animateEntrance() {
+    // Add staggered animations to dashboard elements
+    const elements = document.querySelectorAll('.stat-card, .section-card, .action-btn');
+    elements.forEach((el, index) => {
+      el.style.animationDelay = `${index * 0.1}s`;
+      el.classList.add('fade-in-up-delayed');
+    });
+
+    // Add floating animation to logo
+    const logo = document.querySelector('.logo');
+    if (logo) {
+      logo.classList.add('floating-animation');
+    }
+
+    // Add pulse animation to main header
+    const header = document.querySelector('#pageTitle');
+    if (header) {
+      header.classList.add('pulse-animation');
+    }
+  }
+
+  initializeAdditionalFeatures() {
+    // Initialize tooltips
+    this.initializeTooltips();
+    
+    // Initialize performance monitoring
+    this.initializePerformanceMonitoring();
+    
+    // Initialize accessibility features
+    this.initializeAccessibilityFeatures();
+    
+    // Initialize keyboard shortcuts
+    this.initializeKeyboardShortcuts();
+    
+    // Initialize dynamic theming
+    this.initializeDynamicTheming();
+    
+    // Initialize enhanced animations
+    this.initializeEnhancedAnimations();
+  }
+
+  initializeTooltips() {
+    // Add tooltip functionality to elements with data-tooltip attribute
+    document.querySelectorAll('[data-tooltip]').forEach(el => {
+      el.addEventListener('mouseenter', (e) => {
+        const tooltip = document.createElement('div');
+        tooltip.className = 'tooltip';
+        tooltip.textContent = el.getAttribute('data-tooltip');
+        tooltip.style.position = 'absolute';
+        tooltip.style.left = e.pageX + 10 + 'px';
+        tooltip.style.top = e.pageY - 30 + 'px';
+        tooltip.classList.add('visible');
+        document.body.appendChild(tooltip);
+
+        el._tooltip = tooltip;
+      });
+
+      el.addEventListener('mouseleave', () => {
+        if (el._tooltip) {
+          el._tooltip.remove();
+          el._tooltip = null;
+        }
+      });
+
+      el.addEventListener('mousemove', (e) => {
+        if (el._tooltip) {
+          el._tooltip.style.left = e.pageX + 10 + 'px';
+          el._tooltip.style.top = e.pageY - 30 + 'px';
+        }
+      });
+    });
+  }
+
+  initializePerformanceMonitoring() {
+    // Basic performance monitoring
+    this.startTime = Date.now();
+    
+    // Log performance metrics
+    window.addEventListener('load', () => {
+      const loadTime = Date.now() - this.startTime;
+      console.log(`Page loaded in ${loadTime}ms`);
+    });
+  }
+
+  initializeAccessibilityFeatures() {
+    // Add keyboard navigation support
+    document.addEventListener('keydown', (e) => {
+      // Skip to main content with Ctrl+Alt+C
+      if (e.ctrlKey && e.altKey && e.key === 'c') {
+        e.preventDefault();
+        document.querySelector('.main-content').focus();
+      }
+      
+      // Skip to navigation with Ctrl+Alt+N
+      if (e.ctrlKey && e.altKey && e.key === 'n') {
+        e.preventDefault();
+        document.querySelector('.main-nav').focus();
+      }
+    });
+
+    // Add focus indicators for better accessibility
+    document.addEventListener('focusin', (e) => {
+      if (e.target.matches('a, button, input, select, textarea, [tabindex]')) {
+        e.target.classList.add('focus-glow');
+      }
+    });
+
+    document.addEventListener('focusout', (e) => {
+      e.target.classList.remove('focus-glow');
+    });
+  }
+
+  initializeKeyboardShortcuts() {
+    document.addEventListener('keydown', (e) => {
+      // Global shortcuts
+      if (e.ctrlKey && e.key === 'k') {
+        e.preventDefault();
+        // Focus search or command palette
+        this.openCommandPalette();
+      }
+      
+      // View navigation shortcuts
+      if (e.altKey) {
+        switch(e.key) {
+          case '1':
+            e.preventDefault();
+            this.navigateTo('dashboard');
+            break;
+          case '2':
+            e.preventDefault();
+            this.navigateTo('workspace');
+            break;
+          case '3':
+            e.preventDefault();
+            this.navigateTo('chat');
+            break;
+          case '4':
+            e.preventDefault();
+            this.navigateTo('classes');
+            break;
+          case '5':
+            e.preventDefault();
+            this.navigateTo('tasks');
+            break;
+          case '6':
+            e.preventDefault();
+            this.navigateTo('analytics');
+            break;
+          case '7':
+            e.preventDefault();
+            this.navigateTo('flashcards');
+            break;
+        }
+      }
+    });
+  }
+
+  openCommandPalette() {
+    // Create a command palette overlay
+    const palette = document.createElement('div');
+    palette.id = 'commandPalette';
+    palette.className = 'modal-overlay';
+    palette.style.display = 'flex';
+    palette.style.zIndex = '9999';
+    
+    palette.innerHTML = `
+      <div class="modal-card" style="width: 90%; max-width: 600px;">
+        <div class="modal-header">
+          <h3 class="gradient-text">Command Palette</h3>
+          <button class="btn-close" id="closeCommandPalette">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+        <div class="modal-body">
+          <input type="text" id="commandInput" placeholder="Type a command..." 
+                 style="width: 100%; padding: 1rem; margin-bottom: 1rem; background: var(--bg-input); border: 1px solid var(--border); border-radius: 8px; color: var(--text-main);">
+          <div id="commandResults" style="max-height: 300px; overflow-y: auto;"></div>
+        </div>
+      </div>
+    `;
+    
+    document.body.appendChild(palette);
+    
+    // Add command suggestions
+    const commands = [
+      { action: 'navigateTo', params: ['dashboard'], label: 'Go to Dashboard', shortcut: 'Alt+1' },
+      { action: 'navigateTo', params: ['workspace'], label: 'Go to Workspace', shortcut: 'Alt+2' },
+      { action: 'navigateTo', params: ['chat'], label: 'Go to Chat', shortcut: 'Alt+3' },
+      { action: 'navigateTo', params: ['classes'], label: 'Go to Classes', shortcut: 'Alt+4' },
+      { action: 'navigateTo', params: ['tasks'], label: 'Go to Tasks', shortcut: 'Alt+5' },
+      { action: 'navigateTo', params: ['analytics'], label: 'Go to Analytics', shortcut: 'Alt+6' },
+      { action: 'navigateTo', params: ['flashcards'], label: 'Go to Flashcards', shortcut: 'Alt+7' },
+      { action: 'showCreateClassModal', params: [], label: 'Create New Class', shortcut: 'Ctrl+Shift+C' },
+      { action: 'showCreateTaskModal', params: [], label: 'Create New Task', shortcut: 'Ctrl+Shift+T' },
+      { action: 'toggleTheme', params: [], label: 'Toggle Theme', shortcut: 'Ctrl+Shift+T' }
+    ];
+    
+    const commandInput = document.getElementById('commandInput');
+    const commandResults = document.getElementById('commandResults');
+    
+    commandInput.focus();
+    
+    // Populate command results
+    const filteredCommands = commands.filter(cmd => 
+      cmd.label.toLowerCase().includes(commandInput.value.toLowerCase())
+    );
+    
+    commandResults.innerHTML = filteredCommands.map(cmd => `
+      <div class="command-item" style="padding: 0.75rem; border-bottom: 1px solid var(--border); cursor: pointer; transition: background 0.2s;" 
+           onclick="window.app.executeCommand('${cmd.action}', ${JSON.stringify(cmd.params)})">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <span>${cmd.label}</span>
+          <small style="color: var(--text-muted);">${cmd.shortcut}</small>
+        </div>
+      </div>
+    `).join('');
+    
+    // Close palette when clicking close button or pressing Escape
+    document.getElementById('closeCommandPalette').addEventListener('click', () => {
+      palette.remove();
+    });
+    
+    commandInput.addEventListener('keyup', (e) => {
+      if (e.key === 'Escape') {
+        palette.remove();
+      } else {
+        // Update command results based on input
+        const filtered = commands.filter(cmd => 
+          cmd.label.toLowerCase().includes(commandInput.value.toLowerCase())
+        );
+        
+        commandResults.innerHTML = filtered.map(cmd => `
+          <div class="command-item" style="padding: 0.75rem; border-bottom: 1px solid var(--border); cursor: pointer; transition: background 0.2s;" 
+               onclick="window.app.executeCommand('${cmd.action}', ${JSON.stringify(cmd.params)})">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <span>${cmd.label}</span>
+              <small style="color: var(--text-muted);">${cmd.shortcut}</small>
+            </div>
+          </div>
+        `).join('');
+      }
+    });
+  }
+
+  executeCommand(action, params) {
+    if (this[action] && typeof this[action] === 'function') {
+      this[action](...params);
+      // Close the command palette
+      const palette = document.getElementById('commandPalette');
+      if (palette) {
+        palette.remove();
+      }
+    }
+  }
+
+  initializeDynamicTheming() {
+    // Allow users to customize theme colors dynamically
+    const savedTheme = localStorage.getItem('scholar_theme');
+    if (savedTheme) {
+      try {
+        const theme = JSON.parse(savedTheme);
+        this.applyCustomTheme(theme);
+      } catch (e) {
+        console.error('Error applying saved theme:', e);
+      }
+    }
+  }
+
+  applyCustomTheme(theme) {
+    const root = document.documentElement;
+    Object.entries(theme).forEach(([property, value]) => {
+      root.style.setProperty(property, value);
+    });
+  }
+
+  initializeEnhancedAnimations() {
+    // Add intersection observer for scroll-triggered animations
+    if ('IntersectionObserver' in window) {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('animate-in');
+            
+            // Add different animation classes based on element type
+            if (entry.target.classList.contains('stat-card')) {
+              entry.target.classList.add('slide-in-up-animation');
+            } else if (entry.target.classList.contains('section-card')) {
+              entry.target.classList.add('slide-in-right-animation');
+            } else if (entry.target.classList.contains('file-card')) {
+              entry.target.classList.add('slide-in-left-animation');
+            }
+            
+            observer.unobserve(entry.target);
+          }
+        });
+      }, {
+        threshold: 0.1
+      });
+      
+      // Observe elements that should animate when scrolled into view
+      document.querySelectorAll('.stat-card, .section-card, .file-card, .class-card, .task-card').forEach(el => {
+        observer.observe(el);
+      });
+    }
   }
 
   initializeModules() {
@@ -52,9 +367,656 @@ class ScholarAIApp {
     if (window.innerWidth > 768) {
       this.initializeCursorEffect();
     }
-    
+
     // Initialize particle system
     this.initializeParticleSystem();
+
+    // Initialize floating background elements
+    this.initializeFloatingElements();
+
+    // Initialize ripple effects
+    this.initializeRippleEffects();
+
+    // Initialize parallax scrolling
+    this.initializeParallaxScrolling();
+    
+    // Initialize enhanced UI effects
+    this.initializeEnhancedUIEffects();
+  }
+
+  initializeEnhancedUIEffects() {
+    // Add enhanced hover effects to all interactive elements
+    this.addEnhancedHoverEffects();
+    
+    // Initialize enhanced form controls
+    this.initializeEnhancedFormControls();
+    
+    // Initialize dynamic content loading
+    this.initializeDynamicContentLoading();
+    
+    // Initialize enhanced modals
+    this.initializeEnhancedModals();
+  }
+
+  addEnhancedHoverEffects() {
+    // Add enhanced hover effects to buttons
+    document.querySelectorAll('.btn-primary, .btn-text, .btn-icon, .nav-link, .action-btn, .stat-card, .file-card, .class-card, .task-card').forEach(el => {
+      el.classList.add('magnetic-hover-scale');
+      
+      // Add ripple effect to buttons
+      if (el.classList.contains('btn-primary') || el.classList.contains('btn-text')) {
+        el.classList.add('ripple-effect');
+      }
+      
+      // Add glow effect to cards
+      if (el.classList.contains('stat-card') || el.classList.contains('file-card') || 
+          el.classList.contains('class-card') || el.classList.contains('task-card')) {
+        el.classList.add('hover-glow');
+      }
+    });
+  }
+
+  initializeEnhancedFormControls() {
+    // Add enhanced styling to form inputs
+    document.querySelectorAll('input, textarea, select').forEach(input => {
+      input.classList.add('input-focus-effect');
+      
+      // Add character counter to textareas
+      if (input.tagName === 'TEXTAREA') {
+        this.addCharacterCounter(input);
+      }
+    });
+  }
+
+  addCharacterCounter(textarea) {
+    const maxLength = textarea.getAttribute('maxlength');
+    if (!maxLength) return;
+    
+    const counter = document.createElement('div');
+    counter.className = 'char-counter';
+    counter.style.cssText = `
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      text-align: right;
+      margin-top: 0.25rem;
+    `;
+    
+    const updateCounter = () => {
+      const currentLength = textarea.value.length;
+      counter.textContent = `${currentLength}/${maxLength}`;
+      
+      if (currentLength > maxLength * 0.9) {
+        counter.style.color = 'var(--accent-orange)';
+      } else if (currentLength > maxLength * 0.8) {
+        counter.style.color = 'var(--text-muted)';
+      }
+    };
+    
+    updateCounter();
+    textarea.parentNode.appendChild(counter);
+    
+    textarea.addEventListener('input', updateCounter);
+  }
+
+  initializeDynamicContentLoading() {
+    // Add loading states to AJAX-like operations
+    document.querySelectorAll('[data-load-content]').forEach(el => {
+      el.addEventListener('click', (e) => {
+        e.preventDefault();
+        
+        // Show loading state
+        const originalHTML = el.innerHTML;
+        el.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Loading...';
+        el.disabled = true;
+        
+        // Simulate loading and restore original state
+        setTimeout(() => {
+          el.innerHTML = originalHTML;
+          el.disabled = false;
+        }, 1500);
+      });
+    });
+  }
+
+  initializeEnhancedModals() {
+    // Add enhanced modal functionality
+    document.querySelectorAll('.modal-card').forEach(modal => {
+      // Add drag functionality to modal headers
+      const header = modal.querySelector('.modal-header');
+      if (header) {
+        this.makeModalDraggable(modal, header);
+      }
+    });
+  }
+
+  makeModalDraggable(modal, header) {
+    let isDragging = false;
+    let currentX;
+    let currentY;
+    let initialX;
+    let initialY;
+    let xOffset = 0;
+    let yOffset = 0;
+
+    header.style.cursor = 'move';
+
+    const dragStart = (e) => {
+      initialX = e.clientX - xOffset;
+      initialY = e.clientY - yOffset;
+
+      if (e.target === header) {
+        isDragging = true;
+      }
+    };
+
+    const dragEnd = () => {
+      initialX = currentX;
+      initialY = currentY;
+
+      isDragging = false;
+    };
+
+    const drag = (e) => {
+      if (isDragging) {
+        e.preventDefault();
+        currentX = e.clientX - initialX;
+        currentY = e.clientY - initialY;
+
+        xOffset = currentX;
+        yOffset = currentY;
+
+        setTranslate(currentX, currentY, modal);
+      }
+    };
+
+    const setTranslate = (xPos, yPos, el) => {
+      el.style.transform = `translate3d(${xPos}px, ${yPos}px, 0)`;
+    };
+
+    header.addEventListener('mousedown', dragStart);
+    document.addEventListener('mouseup', dragEnd);
+    document.addEventListener('mousemove', drag);
+  }
+
+  initializeParallaxScrolling() {
+    // Add parallax effect to background elements
+    document.addEventListener('scroll', () => {
+      const scrolled = window.pageYOffset;
+      const parallaxElements = document.querySelectorAll('.floating-element');
+
+      parallaxElements.forEach((element, index) => {
+        const speed = 0.5 + (index * 0.1);
+        element.style.transform = `translateY(${scrolled * speed}px)`;
+      });
+    });
+  }
+
+  // Add enhanced error handling and reporting
+  handleError(error, context = 'General') {
+    console.error(`[${context}] Error:`, error);
+    
+    // Show user-friendly error message
+    this.showToast(`An error occurred: ${error.message || error}`, 'error');
+    
+    // Log error for debugging purposes
+    if (typeof gtag !== 'undefined') {
+      gtag('event', 'exception', {
+        description: `${context}: ${error.message || error}`,
+        fatal: false
+      });
+    }
+  }
+
+  // Add enhanced data persistence
+  saveStateToStorage() {
+    try {
+      const stateToSave = {
+        user: this.state.user,
+        settings: this.state.settings,
+        lastView: this.currentView,
+        lastActiveTime: Date.now()
+      };
+      
+      localStorage.setItem('scholar_app_state', JSON.stringify(stateToSave));
+    } catch (e) {
+      console.error('Failed to save state to storage:', e);
+    }
+  }
+
+  loadStateFromStorage() {
+    try {
+      const savedState = localStorage.getItem('scholar_app_state');
+      if (savedState) {
+        const parsedState = JSON.parse(savedState);
+        
+        // Restore user and settings if they exist
+        if (parsedState.user) {
+          this.state.user = parsedState.user;
+        }
+        
+        if (parsedState.settings) {
+          this.state.settings = {...this.state.settings, ...parsedState.settings};
+        }
+        
+        // Optionally restore last view
+        if (parsedState.lastView && this.isInitialized) {
+          // Don't navigate immediately after loading, let the initial navigation happen first
+          setTimeout(() => {
+            this.navigateTo(parsedState.lastView);
+          }, 1000);
+        }
+      }
+    } catch (e) {
+      console.error('Failed to load state from storage:', e);
+    }
+  }
+
+  // Add enhanced user experience features
+  showFeatureAnnouncement(featureName, description) {
+    const announcement = document.createElement('div');
+    announcement.className = 'announcement-banner';
+    announcement.style.cssText = `
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      background: linear-gradient(45deg, var(--primary), var(--accent-blue));
+      color: white;
+      padding: 1rem;
+      text-align: center;
+      z-index: 10000;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+      animation: slideInDown 0.3s ease-out;
+    `;
+    
+    announcement.innerHTML = `
+      <div style="max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center;">
+        <div>
+          <strong>New Feature:</strong> ${featureName} - ${description}
+        </div>
+        <button class="btn-close" style="color: white;" onclick="this.parentElement.parentElement.remove();">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+    `;
+    
+    document.body.appendChild(announcement);
+    
+    // Auto-remove after 10 seconds
+    setTimeout(() => {
+      if (announcement.parentNode) {
+        announcement.remove();
+      }
+    }, 10000);
+  }
+
+  // Add enhanced notification system
+  showNotification(title, message, type = 'info', duration = 5000) {
+    const notification = document.createElement('div');
+    notification.className = `notification toast ${type}`;
+    notification.style.cssText = `
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: var(--bg-panel);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1rem 1.5rem;
+      min-width: 300px;
+      box-shadow: var(--shadow);
+      z-index: 10000;
+      animation: slideInRight 0.3s ease, pulse 2s infinite;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    `;
+    
+    const icons = {
+      success: '<i class="fas fa-check-circle" style="color: var(--primary);"></i>',
+      error: '<i class="fas fa-exclamation-circle" style="color: #ff4757;"></i>',
+      info: '<i class="fas fa-info-circle" style="color: var(--accent-blue);"></i>',
+      warning: '<i class="fas fa-exclamation-triangle" style="color: var(--accent-orange);"></i>'
+    };
+    
+    notification.innerHTML = `
+      ${icons[type]}
+      <div>
+        <strong>${title}</strong>
+        <p style="margin: 0.25rem 0 0 0; font-size: 0.9rem;">${message}</p>
+      </div>
+      <button class="btn-close" onclick="this.parentElement.remove();" style="align-self: flex-start;">
+        <i class="fas fa-times"></i>
+      </button>
+    `;
+    
+    document.body.appendChild(notification);
+    
+    // Auto-remove after specified duration
+    setTimeout(() => {
+      if (notification.parentNode) {
+        notification.remove();
+      }
+    }, duration);
+  }
+
+  initializeRippleEffects() {
+    // Add ripple effect to buttons
+    document.querySelectorAll('.btn-primary, .action-btn, .nav-link').forEach(button => {
+      button.classList.add('ripple-effect');
+
+      button.addEventListener('click', function(e) {
+        // Create ripple element
+        const ripple = document.createElement('span');
+        ripple.classList.add('ripple');
+
+        // Position ripple at click location
+        const rect = this.getBoundingClientRect();
+        const size = Math.max(rect.width, rect.height);
+        const x = e.clientX - rect.left - size / 2;
+        const y = e.clientY - rect.top - size / 2;
+
+        ripple.style.width = ripple.style.height = size + 'px';
+        ripple.style.left = x + 'px';
+        ripple.style.top = y + 'px';
+
+        // Add ripple to button
+        this.appendChild(ripple);
+
+        // Remove ripple after animation
+        setTimeout(() => {
+          ripple.remove();
+        }, 600);
+      });
+    });
+  }
+
+  // Override the original showToast method with enhanced version
+  showToast(message, type = 'info') {
+    const container = document.getElementById('toastContainer');
+    const toast = document.createElement('div');
+    toast.className = `toast ${type} slide-in-right-animation`;
+
+    const icons = {
+      success: 'fa-check-circle',
+      error: 'fa-exclamation-circle',
+      info: 'fa-info-circle',
+      warning: 'fa-exclamation-triangle'
+    };
+
+    toast.innerHTML = `
+      <i class="fas ${icons[type]}"></i>
+      <span>${message}</span>
+    `;
+
+    // Add to beginning of container for stacking effect
+    if (container.firstChild) {
+      container.insertBefore(toast, container.firstChild);
+    } else {
+      container.appendChild(toast);
+    }
+
+    // Add entrance animation
+    setTimeout(() => {
+      toast.classList.add('bounce-in-animation');
+    }, 10);
+
+    // Auto remove after delay
+    setTimeout(() => {
+      toast.classList.remove('bounce-in-animation');
+      toast.classList.add('slide-out-right-animation');
+      setTimeout(() => toast.remove(), 500);
+    }, 4000);
+  }
+
+  // Add method to update UI with new features
+  updateUIWithNewFeatures() {
+    // Add new UI elements and functionality
+    this.addEnhancedDashboardWidgets();
+    this.addQuickActionButtons();
+    this.addEnhancedSearchFunctionality();
+  }
+
+  addEnhancedDashboardWidgets() {
+    // Add additional widgets to the dashboard if they don't already exist
+    const dashboardGrid = document.getElementById('view-dashboard');
+    if (!dashboardGrid.querySelector('.productivity-widget')) {
+      const productivityWidget = document.createElement('div');
+      productivityWidget.className = 'section-card productivity-widget';
+      productivityWidget.innerHTML = `
+        <div class="section-header">
+          <h3 class="gradient-text">Productivity Insights</h3>
+          <button class="btn-text">View Report</button>
+        </div>
+        <div class="stats-grid" style="grid-template-columns: 1fr; margin-top: 1rem;">
+          <div class="stat-card hover-lift" style="text-align: center; padding: 1.5rem;">
+            <div class="stat-icon bg-purple" style="justify-content: center; margin: 0 auto 1rem;">
+              <i class="fas fa-chart-line" style="font-size: 1.5rem;"></i>
+            </div>
+            <div class="stat-info">
+              <h3 class="pulse-glow">87%</h3>
+              <p>Focus Score</p>
+            </div>
+          </div>
+        </div>
+      `;
+      
+      // Insert after the stats grid
+      const statsGrid = dashboardGrid.querySelector('.stats-grid');
+      if (statsGrid) {
+        statsGrid.parentNode.insertBefore(productivityWidget, statsGrid.nextSibling);
+      }
+    }
+  }
+
+  addQuickActionButtons() {
+    // Add quick action buttons to the header
+    const headerRight = document.querySelector('.header-right');
+    if (!headerRight.querySelector('.quick-actions-menu')) {
+      const quickActionsBtn = document.createElement('button');
+      quickActionsBtn.className = 'btn-icon quick-actions-menu';
+      quickActionsBtn.innerHTML = '<i class="fas fa-bolt"></i>';
+      quickActionsBtn.title = 'Quick Actions';
+      
+      quickActionsBtn.addEventListener('click', (e) => {
+        this.showQuickActionsMenu(e);
+      });
+      
+      headerRight.insertBefore(quickActionsBtn, headerRight.firstChild);
+    }
+  }
+
+  showQuickActionsMenu(event) {
+    // Remove any existing menus
+    document.querySelectorAll('.quick-actions-dropdown').forEach(menu => menu.remove());
+    
+    const menu = document.createElement('div');
+    menu.className = 'quick-actions-dropdown dropdown-menu';
+    menu.style.cssText = `
+      position: absolute;
+      top: ${event.clientY + 10}px;
+      right: ${window.innerWidth - event.clientX}px;
+      width: 250px;
+    `;
+    
+    menu.innerHTML = `
+      <div class="dropdown-header" style="padding: 1rem; border-bottom: 1px solid var(--border); font-weight: 600;">
+        Quick Actions
+      </div>
+      <div class="dropdown-items" style="padding: 0.5rem 0;">
+        <div class="dropdown-item" style="padding: 0.75rem 1rem; cursor: pointer; transition: background 0.2s;" 
+             onclick="window.app.navigateTo('workspace'); window.app.closeQuickActionsMenu();">
+          <i class="fas fa-file-upload" style="margin-right: 0.75rem; color: var(--primary);"></i>
+          Upload Document
+        </div>
+        <div class="dropdown-item" style="padding: 0.75rem 1rem; cursor: pointer; transition: background 0.2s;" 
+             onclick="window.app.navigateTo('chat'); window.app.closeQuickActionsMenu();">
+          <i class="fas fa-comments" style="margin-right: 0.75rem; color: var(--accent-blue);"></i>
+          Start Chat
+        </div>
+        <div class="dropdown-item" style="padding: 0.75rem 1rem; cursor: pointer; transition: background 0.2s;" 
+             onclick="window.app.showCreateTaskModal(); window.app.closeQuickActionsMenu();">
+          <i class="fas fa-tasks" style="margin-right: 0.75rem; color: var(--accent-purple);"></i>
+          Create Task
+        </div>
+        <div class="dropdown-item" style="padding: 0.75rem 1rem; cursor: pointer; transition: background 0.2s;" 
+             onclick="window.app.showCreateClassModal(); window.app.closeQuickActionsMenu();">
+          <i class="fas fa-school" style="margin-right: 0.75rem; color: var(--accent-orange);"></i>
+          Create Class
+        </div>
+      </div>
+    `;
+    
+    document.body.appendChild(menu);
+    
+    // Close menu when clicking elsewhere
+    const closeMenu = (e) => {
+      if (!menu.contains(e.target)) {
+        this.closeQuickActionsMenu();
+        document.removeEventListener('click', closeMenu);
+      }
+    };
+    
+    setTimeout(() => {
+      document.addEventListener('click', closeMenu);
+    }, 10);
+  }
+
+  closeQuickActionsMenu() {
+    document.querySelectorAll('.quick-actions-dropdown').forEach(menu => menu.remove());
+  }
+
+  addEnhancedSearchFunctionality() {
+    // Add a global search bar to the header if it doesn't exist
+    const header = document.querySelector('.header');
+    if (!header.querySelector('.global-search')) {
+      const searchContainer = document.createElement('div');
+      searchContainer.className = 'global-search';
+      searchContainer.style.cssText = `
+        position: relative;
+        margin-right: 1rem;
+      `;
+      
+      searchContainer.innerHTML = `
+        <input type="text" 
+               placeholder="Search everything..." 
+               class="search-input"
+               style="background: var(--bg-input); border: 1px solid var(--border); 
+                      border-radius: 20px; padding: 0.5rem 1rem 0.5rem 2.5rem; 
+                      color: var(--text-main); width: 200px; transition: width 0.3s;">
+        <i class="fas fa-search" style="position: absolute; left: 1rem; top: 50%; 
+                                       transform: translateY(-50%); color: var(--text-muted);"></i>
+      `;
+      
+      const searchInput = searchContainer.querySelector('.search-input');
+      
+      // Expand search on focus
+      searchInput.addEventListener('focus', () => {
+        searchInput.style.width = '250px';
+      });
+      
+      searchInput.addEventListener('blur', () => {
+        if (searchInput.value === '') {
+          searchInput.style.width = '200px';
+        }
+      });
+      
+      // Add search functionality
+      searchInput.addEventListener('keyup', (e) => {
+        if (e.key === 'Enter') {
+          this.performGlobalSearch(searchInput.value);
+        }
+      });
+      
+      header.insertBefore(searchContainer, header.querySelector('.header-right'));
+    }
+  }
+
+  performGlobalSearch(query) {
+    if (!query.trim()) return;
+    
+    // Show search results in a modal
+    const modal = document.getElementById('modalOverlay');
+    const body = document.getElementById('modalBody');
+    const footer = document.getElementById('modalFooter');
+    
+    body.innerHTML = `
+      <div class="search-results-container">
+        <h3 class="gradient-text">Search Results for "${query}"</h3>
+        <div class="search-results" id="searchResultsList">
+          <div class="empty-state">
+            <i class="fas fa-search"></i>
+            <h3>No Results Found</h3>
+            <p>Try different keywords or check your spelling</p>
+          </div>
+        </div>
+      </div>
+    `;
+    
+    footer.innerHTML = `
+      <button class="btn-text" id="closeSearchModal">Close</button>
+    `;
+    
+    document.getElementById('closeSearchModal').addEventListener('click', () => {
+      modal.style.display = 'none';
+    });
+    
+    modal.style.display = 'flex';
+    
+    // Simulate search results loading
+    setTimeout(() => {
+      document.getElementById('searchResultsList').innerHTML = `
+        <div class="search-result-item">
+          <i class="fas fa-file-pdf"></i>
+          <div>
+            <h4>Research Paper on AI Ethics</h4>
+            <p>Uploaded to Workspace • 2 days ago</p>
+          </div>
+        </div>
+        <div class="search-result-item">
+          <i class="fas fa-comments"></i>
+          <div>
+            <h4>Chat about Machine Learning</h4>
+            <p>Conversation with AI • 1 week ago</p>
+          </div>
+        </div>
+        <div class="search-result-item">
+          <i class="fas fa-tasks"></i>
+          <div>
+            <h4>Complete Assignment</h4>
+            <p>Task in CS Class • Due tomorrow</p>
+          </div>
+        </div>
+      `;
+    }, 1000);
+  }
+
+  initializeFloatingElements() {
+    // Create floating background elements
+    const container = document.querySelector('.background-elements');
+    if (!container) return;
+
+    // Clear existing elements to prevent duplicates
+    container.innerHTML = '';
+
+    for (let i = 0; i < 15; i++) {
+      const element = document.createElement('div');
+      element.classList.add('floating-element');
+      element.classList.add(`element-${i+1}`);
+      element.style.cssText = `
+        position: fixed;
+        width: ${Math.random() * 100 + 50}px;
+        height: ${Math.random() * 100 + 50}px;
+        background: radial-gradient(circle, rgba(0, 237, 100, 0.1), transparent);
+        border-radius: 50%;
+        top: ${Math.random() * 100}vh;
+        left: ${Math.random() * 100}vw;
+        z-index: -1;
+        opacity: 0.3;
+        animation: float ${Math.random() * 20 + 10}s infinite ease-in-out;
+        animation-delay: ${Math.random() * 5}s;
+      `;
+      container.appendChild(element);
+    }
   }
 
   initializeCursorEffect() {
@@ -72,6 +1034,7 @@ class ScholarAIApp {
       mix-blend-mode: difference;
       transition: transform 0.1s ease;
       transform: translate(-50%, -50%);
+      animation: cursorPulse 2s infinite;
     `;
     document.body.appendChild(cursor);
 
@@ -110,7 +1073,7 @@ class ScholarAIApp {
 
     const ctx = canvas.getContext('2d');
     const particles = [];
-    
+
     // Set canvas size
     function resizeCanvas() {
       canvas.width = window.innerWidth;
@@ -120,37 +1083,47 @@ class ScholarAIApp {
     window.addEventListener('resize', resizeCanvas);
 
     // Create particles
-    for (let i = 0; i < 50; i++) {
+    for (let i = 0; i < 100; i++) {
       particles.push({
         x: Math.random() * canvas.width,
         y: Math.random() * canvas.height,
         vx: (Math.random() - 0.5) * 0.5,
         vy: (Math.random() - 0.5) * 0.5,
         radius: Math.random() * 2 + 0.5,
-        opacity: Math.random() * 0.5 + 0.1
+        opacity: Math.random() * 0.5 + 0.1,
+        color: `hsl(${Math.random() * 360}, 70%, 60%)`,
+        life: Math.random() * 100
       });
     }
 
     function animate() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-      
+
       particles.forEach(p => {
         p.x += p.vx;
         p.y += p.vy;
-        
+        p.life -= 0.1;
+
         // Wrap edges
         if (p.x < 0) p.x = canvas.width;
         if (p.x > canvas.width) p.x = 0;
         if (p.y < 0) p.y = canvas.height;
         if (p.y > canvas.height) p.y = 0;
-        
+
+        // Reset particle if life is over
+        if (p.life <= 0) {
+          p.x = Math.random() * canvas.width;
+          p.y = Math.random() * canvas.height;
+          p.life = Math.random() * 100;
+        }
+
         // Draw particle
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(0, 237, 100, ${p.opacity})`;
+        ctx.fillStyle = p.color;
         ctx.fill();
       });
-      
+
       requestAnimationFrame(animate);
     }
     animate();
@@ -186,18 +1159,21 @@ class ScholarAIApp {
       e.preventDefault();
       uploadArea.style.borderColor = 'var(--primary)';
       uploadArea.style.backgroundColor = 'rgba(0, 237, 100, 0.1)';
+      uploadArea.classList.add('glow-element');
     });
 
     uploadArea.addEventListener('dragleave', () => {
       uploadArea.style.borderColor = 'var(--border)';
       uploadArea.style.backgroundColor = 'var(--bg-card)';
+      uploadArea.classList.remove('glow-element');
     });
 
     uploadArea.addEventListener('drop', (e) => {
       e.preventDefault();
       uploadArea.style.borderColor = 'var(--border)';
       uploadArea.style.backgroundColor = 'var(--bg-card)';
-      
+      uploadArea.classList.remove('glow-element');
+
       const file = e.dataTransfer.files[0];
       if (file && file.type === 'application/pdf') {
         this.handleFileUpload(file);
@@ -267,12 +1243,15 @@ class ScholarAIApp {
       document.getElementById('classesGrid').style.display = 'grid';
     });
 
+    // Add hover effects to all interactive elements
+    this.addHoverEffects();
+
     // Poll for user updates every 10 seconds
     setInterval(async () => {
       try {
         const response = await API.get('/auth/me');
         const newUser = response.data.user;
-        
+
         if (this.state.user && this.state.user.dna.xp !== newUser.dna.xp) {
           const xpDiff = newUser.dna.xp - this.state.user.dna.xp;
           if (xpDiff > 0) {
@@ -289,6 +1268,43 @@ class ScholarAIApp {
         console.error('Polling error:', error);
       }
     }, 10000);
+  }
+
+  addHoverEffects() {
+    // Add hover effects to cards
+    document.querySelectorAll('.stat-card, .file-card, .class-card, .task-card').forEach(card => {
+      card.addEventListener('mouseenter', () => {
+        card.classList.add('hover-glow');
+        card.style.transform = 'translateY(-5px)';
+      });
+
+      card.addEventListener('mouseleave', () => {
+        card.classList.remove('hover-glow');
+        card.style.transform = 'translateY(0)';
+      });
+    });
+
+    // Add hover effects to buttons
+    document.querySelectorAll('.btn-primary, .btn-text, .btn-icon').forEach(btn => {
+      btn.addEventListener('mouseenter', () => {
+        btn.classList.add('hover-glow');
+      });
+
+      btn.addEventListener('mouseleave', () => {
+        btn.classList.remove('hover-glow');
+      });
+    });
+
+    // Add hover effects to navigation links
+    document.querySelectorAll('.nav-link').forEach(link => {
+      link.addEventListener('mouseenter', () => {
+        link.classList.add('hover-glow');
+      });
+
+      link.addEventListener('mouseleave', () => {
+        link.classList.remove('hover-glow');
+      });
+    });
   }
 
   async loadUserData() {
@@ -334,31 +1350,43 @@ class ScholarAIApp {
   }
 
   navigateTo(viewName) {
-    // Hide all views
+    // Hide all views with animation
     document.querySelectorAll('.view').forEach(v => {
-      v.style.display = 'none';
       v.classList.remove('active');
+      v.classList.add('slide-out-left-animation');
+      setTimeout(() => {
+        v.style.display = 'none';
+      }, 300);
     });
-    
-    // Show target view
+
+    // Show target view with animation
     const view = document.getElementById(`view-${viewName}`);
     view.style.display = 'block';
-    view.classList.add('active', 'animate__animated', 'animate__fadeIn');
-    
-    // Update nav links
+    view.classList.add('active', 'slide-in-right-animation');
+
+    // Update nav links with animation
     document.querySelectorAll('.nav-link').forEach(link => {
       link.classList.remove('active');
       if (link.getAttribute('data-view') === viewName) {
         link.classList.add('active');
+        link.classList.add('tada-animation');
+        setTimeout(() => {
+          link.classList.remove('tada-animation');
+        }, 1000);
       }
     });
-    
-    // Update page title
-    document.getElementById('pageTitle').textContent = this.getTitleForView(viewName);
-    
+
+    // Update page title with animation
+    const pageTitle = document.getElementById('pageTitle');
+    pageTitle.classList.add('rubber-band-animation');
+    setTimeout(() => {
+      pageTitle.textContent = this.getTitleForView(viewName);
+      pageTitle.classList.remove('rubber-band-animation');
+    }, 100);
+
     // Load view-specific data
     this.loadViewData(viewName);
-    
+
     this.currentView = viewName;
   }
 
@@ -445,8 +1473,8 @@ class ScholarAIApp {
 
   renderRecentActivity(activities) {
     const container = document.getElementById('recentActivity');
-    container.innerHTML = activities.slice(0, 5).map(activity => `
-      <div class="activity-item">
+    container.innerHTML = activities.slice(0, 5).map((activity, index) => `
+      <div class="activity-item hover-lift" style="animation-delay: ${index * 0.1}s;">
         <div class="activity-icon" style="background: ${activity.color}20; color: ${activity.color}">
           <i class="fas ${activity.icon}"></i>
         </div>
@@ -457,13 +1485,20 @@ class ScholarAIApp {
         </div>
       </div>
     `).join('');
+
+    // Add entrance animations to activity items
+    const activityItems = document.querySelectorAll('.activity-item');
+    activityItems.forEach((item, index) => {
+      item.classList.add('slide-in-left-delayed');
+      item.style.animationDelay = `${index * 0.1}s`;
+    });
   }
 
   renderFiles() {
     const container = document.getElementById('filesGrid');
     if (this.state.pdfs.length === 0) {
       container.innerHTML = `
-        <div class="empty-state">
+        <div class="empty-state bounce-animation">
           <i class="fas fa-file-pdf"></i>
           <h3>No Documents Yet</h3>
           <p>Upload your first PDF to get started with AI-powered study tools</p>
@@ -472,8 +1507,8 @@ class ScholarAIApp {
       return;
     }
 
-    container.innerHTML = this.state.pdfs.map(file => `
-      <div class="file-card">
+    container.innerHTML = this.state.pdfs.map((file, index) => `
+      <div class="file-card hover-lift" style="animation-delay: ${index * 0.1}s;">
         <div class="file-icon">
           <i class="fas fa-file-pdf"></i>
         </div>
@@ -497,6 +1532,13 @@ class ScholarAIApp {
         </div>
       </div>
     `).join('');
+
+    // Add entrance animations to file cards
+    const fileCards = document.querySelectorAll('.file-card');
+    fileCards.forEach((card, index) => {
+      card.classList.add('slide-in-up-delayed');
+      card.style.animationDelay = `${index * 0.1}s`;
+    });
   }
 
   formatFileSize(bytes) {
@@ -815,8 +1857,8 @@ class ScholarAIApp {
 
   renderClasses() {
     const container = document.getElementById('classesGrid');
-    container.innerHTML = this.state.classes.map(cls => `
-      <div class="class-card ${cls.color}" onclick="app.viewClass('${cls._id}')">
+    container.innerHTML = this.state.classes.map((cls, index) => `
+      <div class="class-card ${cls.color} hover-lift" style="animation-delay: ${index * 0.1}s;" onclick="app.viewClass('${cls._id}')">
         <h3>${cls.name}</h3>
         <p>${cls.description || 'No description'}</p>
         <div class="class-members">
@@ -825,6 +1867,13 @@ class ScholarAIApp {
         </div>
       </div>
     `).join('');
+
+    // Add entrance animations to class cards
+    const classCards = document.querySelectorAll('.class-card');
+    classCards.forEach((card, index) => {
+      card.classList.add('slide-in-right-delayed');
+      card.style.animationDelay = `${index * 0.1}s`;
+    });
   }
 
   async viewClass(classId) {
@@ -922,7 +1971,7 @@ class ScholarAIApp {
     const container = document.getElementById('tasksGrid');
     if (this.state.tasks.length === 0) {
       container.innerHTML = `
-        <div class="empty-state">
+        <div class="empty-state bounce-animation">
           <i class="fas fa-tasks"></i>
           <h3>No Tasks Yet</h3>
           <p>Create your first task to stay organized</p>
@@ -931,8 +1980,8 @@ class ScholarAIApp {
       return;
     }
 
-    container.innerHTML = this.state.tasks.map(task => `
-      <div class="task-card ${task.status}">
+    container.innerHTML = this.state.tasks.map((task, index) => `
+      <div class="task-card ${task.status} hover-lift" style="animation-delay: ${index * 0.1}s;">
         <div class="task-header">
           <h4 class="task-title">${task.title}</h4>
           <span class="task-status">${task.status}</span>
@@ -950,6 +1999,13 @@ class ScholarAIApp {
         </div>
       </div>
     `).join('');
+
+    // Add entrance animations to task cards
+    const taskCards = document.querySelectorAll('.task-card');
+    taskCards.forEach((card, index) => {
+      card.classList.add('slide-in-left-delayed');
+      card.style.animationDelay = `${index * 0.1}s`;
+    });
   }
 
   filterTasks(status) {
@@ -1262,30 +2318,6 @@ class ScholarAIApp {
       '<i class="fas fa-sun"></i>';
   }
 
-  showToast(message, type = 'info') {
-    const container = document.getElementById('toastContainer');
-    const toast = document.createElement('div');
-    toast.className = `toast ${type} animate__animated animate__fadeInRight`;
-    
-    const icons = {
-      success: 'fa-check-circle',
-      error: 'fa-exclamation-circle',
-      info: 'fa-info-circle',
-      warning: 'fa-exclamation-triangle'
-    };
-    
-    toast.innerHTML = `
-      <i class="fas ${icons[type]}"></i>
-      <span>${message}</span>
-    `;
-    
-    container.appendChild(toast);
-    
-    setTimeout(() => {
-      toast.classList.add('animate__fadeOutRight');
-      setTimeout(() => toast.remove(), 500);
-    }, 4000);
-  }
 }
 
 // API Client
@@ -1372,10 +2404,67 @@ const Utils = {
   
   formatTime(timestamp) {
     return new Date(timestamp).toLocaleTimeString();
+  },
+
+  // Add method to handle app updates
+  checkForUpdates() {
+    // In a real app, this would check for updates from a server
+    // For now, we'll simulate checking for updates
+    setTimeout(() => {
+      // Example: Show a notification if there are updates
+      this.showNotification(
+        'Update Available', 
+        'A new version of Scholar.AI is available with enhanced features and improvements.',
+        'info',
+        10000
+      );
+    }, 5000);
+  },
+
+  // Add method to handle app state synchronization
+  syncAppState() {
+    // Sync app state across tabs/windows
+    window.addEventListener('storage', (e) => {
+      if (e.key === 'scholar_app_state') {
+        try {
+          const newState = JSON.parse(e.newValue);
+          if (newState && newState.user) {
+            this.state.user = newState.user;
+            this.updateUserUI();
+          }
+        } catch (error) {
+          console.error('Error syncing app state:', error);
+        }
+      }
+    });
+  },
+
+  // Add method to handle offline functionality
+  setupOfflineFunctionality() {
+    // Listen for online/offline events
+    window.addEventListener('online', () => {
+      this.showToast('Connection restored!', 'success');
+      // Resync data when coming back online
+      this.loadUserData();
+    });
+
+    window.addEventListener('offline', () => {
+      this.showToast('You are offline. Some features may be limited.', 'warning');
+    });
   }
 };
 
 // Initialize the app when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
   window.app = new ScholarAIApp();
+  
+  // Add additional enhancements after app initialization
+  setTimeout(() => {
+    if (window.app) {
+      window.app.updateUIWithNewFeatures();
+      window.app.checkForUpdates();
+      window.app.syncAppState();
+      window.app.setupOfflineFunctionality();
+    }
+  }, 2000);
 });
